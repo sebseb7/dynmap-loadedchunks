@@ -16,3 +16,5 @@ updates the map
 - optionally update in realtime
 - display additional info per chunk (# of entities)
 - scroll map to loaded chunks
+
+![loadedchunks](https://github.com/sebseb7/dynmap-loadedchunks/assets/677956/8f0d1877-8fa7-4dcf-8d0b-8b3ff1b709d4)
