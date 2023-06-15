@@ -1,0 +1,10 @@
+name: Dynmap-LoadedChunks
+version: '${project.version}'
+main: io.github.sebseb7.Loadedchunks
+api-version: 1.18
+authors: [ sebseb7 ]
+depend: ['dynmap']
+description: LoadedChunks info
+commands:
+  loadedchunks:
+    permission: loadedchunks.admin
