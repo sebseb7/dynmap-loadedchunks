@@ -1,6 +1,6 @@
 name: Dynmap-LoadedChunks
 version: '${project.version}'
-main: io.github.sebseb7.Loadedchunks
+main: io.github.sebseb7.loadedChunks.Loadedchunks
 api-version: 1.18
 authors: [ sebseb7 ]
 depend: ['dynmap']
