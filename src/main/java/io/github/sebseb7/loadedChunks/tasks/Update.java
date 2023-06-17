@@ -62,11 +62,9 @@ public class Update {
 
     final Map<String, AreaMarker> newmap = new HashMap<>();
 
-    main.getLogger().info("updating loaded chunks on map");
     List<World> worlds = main.getServer().getWorlds();
     for (int i = 0; i < worlds.size(); i++) {
       World world = worlds.get(i);
-      main.getLogger().info(world.getName());
 
       String wname = world.getName();
 
