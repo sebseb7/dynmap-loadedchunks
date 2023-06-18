@@ -3,8 +3,9 @@ package io.github.sebseb7.loadedChunks;
 import io.github.sebseb7.loadedchunks.listener.ChunkLoadListener;
 import io.github.sebseb7.loadedchunks.listener.ChunkUnloadListener;
 import io.github.sebseb7.loadedchunks.tasks.Update;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -33,7 +34,7 @@ public final class Loadedchunks extends JavaPlugin {
       getServer().getPluginManager().disablePlugin(this);
       return;
     }
-    markermap = new HashMap<>();
+    markermap = new ConcurrentHashMap<>();
     api = (DynmapAPI) dynmap;
     getServer().getConsoleSender().sendMessage("Loaded");
 
