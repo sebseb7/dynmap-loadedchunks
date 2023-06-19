@@ -21,6 +21,7 @@ public final class Loadedchunks extends JavaPlugin {
   MarkerSet set;
   public Map<String, AreaMarker> markermap;
   private static Loadedchunks instance;
+  private boolean reload = false;
 
   public Loadedchunks() {
     instance = this;
@@ -38,10 +39,19 @@ public final class Loadedchunks extends JavaPlugin {
     api = (DynmapAPI) dynmap;
     getServer().getConsoleSender().sendMessage("Loaded");
 
+    if (reload) {
+      reloadConfig();
+    } else {
+      reload = true;
+    }
+    getConfig().options().copyDefaults(true);
+    saveConfig();
+
     MarkerAPI markerapi = api.getMarkerAPI();
     set = markerapi.getMarkerSet("loadedchunks.markerset");
     if (set == null) {
       set = markerapi.createMarkerSet("loadedchunks.markerset", "Loaded Chunks", null, false);
+      set.setHideByDefault(getConfig().getBoolean("hideLayer", true));
     }
 
     getServer().getPluginManager().registerEvents(new ChunkLoadListener(this, set), instance);

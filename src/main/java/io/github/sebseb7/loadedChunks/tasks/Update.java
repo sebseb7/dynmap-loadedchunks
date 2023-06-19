@@ -12,7 +12,6 @@ import org.dynmap.markers.MarkerSet;
 public class Update {
 
   public static void updateTimed(Loadedchunks main, MarkerSet set) {
-
     List<World> worlds = main.getServer().getWorlds();
     for (int i = 0; i < worlds.size(); i++) {
       World world = worlds.get(i);
@@ -45,12 +44,13 @@ public class Update {
 
           if (m.getDescription() != type) {
             m.setDescription(type);
+            double opacity = main.getConfig().getDouble("opacity", 0.5);
             if (type == "BORDER") {
-              m.setFillStyle(0.5, 0x0000ff);
+              m.setFillStyle(opacity, 0x0000ff);
             } else if (type == "ENTITY_TICKING") {
-              m.setFillStyle(0.5, 0xff0000);
+              m.setFillStyle(opacity, 0xff0000);
             } else if (type == "TICKING") {
-              m.setFillStyle(0.5, 0xff00ff);
+              m.setFillStyle(opacity, 0xff00ff);
             }
           }
         }
@@ -112,13 +112,14 @@ public class Update {
           continue;
         }
 
-        m.setLineStyle(1, 0.5, 0x00ff00);
+        double opacity = main.getConfig().getDouble("opacity", 0.5);
+        m.setLineStyle(1, opacity, 0x00ff00);
         if (chunk.getLoadLevel() == Chunk.LoadLevel.BORDER) {
-          m.setFillStyle(0.5, 0x0000ff);
+          m.setFillStyle(opacity, 0x0000ff);
         } else if (chunk.getLoadLevel() == Chunk.LoadLevel.ENTITY_TICKING) {
-          m.setFillStyle(0.5, 0xff0000);
+          m.setFillStyle(opacity, 0xff0000);
         } else if (chunk.getLoadLevel() == Chunk.LoadLevel.TICKING) {
-          m.setFillStyle(0.5, 0xff00ff);
+          m.setFillStyle(opacity, 0xff00ff);
         }
         newmap.put(markerid, m);
       }
@@ -127,7 +128,10 @@ public class Update {
       for (final AreaMarker oldm : main.markermap.values()) {
         oldm.deleteMarker();
       }
+      main.markermap.clear();
+      for (String i : newmap.keySet()) {
+        main.markermap.put(i, newmap.get(i));
+      }
     }
-    main.markermap = newmap;
   }
 }

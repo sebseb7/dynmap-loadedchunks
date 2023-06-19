@@ -56,14 +56,15 @@ public class ChunkLoadListener implements Listener {
     if (m == null) {
       return;
     }
+    double opacity = main.getConfig().getDouble("opacity", 0.5);
 
-    m.setLineStyle(1, 0.5, 0x00ff00);
+    m.setLineStyle(1, opacity, 0x00ff00);
     if (chunk.getLoadLevel() == Chunk.LoadLevel.BORDER) {
-      m.setFillStyle(0.5, 0x0000ff);
+      m.setFillStyle(opacity, 0x0000ff);
     } else if (chunk.getLoadLevel() == Chunk.LoadLevel.ENTITY_TICKING) {
-      m.setFillStyle(0.5, 0xff0000);
+      m.setFillStyle(opacity, 0xff0000);
     } else if (chunk.getLoadLevel() == Chunk.LoadLevel.TICKING) {
-      m.setFillStyle(0.5, 0xff00ff);
+      m.setFillStyle(opacity, 0xff00ff);
     }
     main.markermap.put(markerid, m);
   }
