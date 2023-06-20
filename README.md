@@ -1,3 +1,5 @@
+[![Build](https://github.com/sebseb7/dynmap-loadedchunks/actions/workflows/build.yml/badge.svg)](https://github.com/sebseb7/dynmap-loadedchunks/actions/workflows/build.yml)
+
 # Dynmap-Loadedchunks
 
 Dynmap-Loadedchunks is an addon for Dynmap
