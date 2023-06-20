@@ -18,4 +18,5 @@ jobs:
       - run: mkdir staging && cp target/*.jar staging
       - uses: actions/upload-artifact@v3
         with:
+          name: Dynmap-LoadedChunks.jar
           path: staging
