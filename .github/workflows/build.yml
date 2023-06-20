@@ -16,9 +16,10 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode package
       - run: mkdir staging && cp target/*.jar staging
-      - name: version
-        run: mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | sed -n -e '/^\[.*\]/ !{ /^[0-9]/ { p; q } }'
-        id: version
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Dynmap-LoadedChunks.jar
+          path: staging
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
