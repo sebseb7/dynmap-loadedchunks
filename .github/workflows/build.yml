@@ -16,10 +16,6 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode package
       - run: mkdir staging && cp target/*.jar staging
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Dynmap-LoadedChunks.jar
-          path: staging
       - name: version
         run: mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | sed -n -e '/^\[.*\]/ !{ /^[0-9]/ { p; q } }'
         id: version
@@ -34,3 +30,12 @@ jobs:
           body_path: CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}
+      - name: upload linux artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: target/*.jar
+          asset_name: Dynmap-LoadedChunks.jar
+          asset_content_type: application/java-archive
