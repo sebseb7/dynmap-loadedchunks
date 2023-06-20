@@ -16,9 +16,7 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode package
       - run: mkdir staging && cp target/*.jar staging
-      - uses: MCJack123/ghaction-generate-release-hashes@v3
-        with:
-          file-name: hash.txt
+      - run: cd target && md5sum *.jar > ../hash.txt
       - uses: actions/upload-artifact@v3
         with:
           name: Dynmap-LoadedChunks.jar
