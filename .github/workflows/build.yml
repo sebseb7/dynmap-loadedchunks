@@ -20,9 +20,10 @@ jobs:
         with:
           name: Dynmap-LoadedChunks.jar
           path: staging
-      - name: version    run: echo "::set-output name=version::$(./bin/azblogfilter --version)"
-        run: echo "::set-output name=version::$(./bin/azblogfilter --version)"
+      - name: version
+        run: mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | sed -n -e '/^\[.*\]/ !{ /^[0-9]/ { p; q } }'
       - name: release
+        id: version
         uses: actions/create-release@v1
         id: create_release
         with:
