@@ -31,6 +31,7 @@ public class ChunkUnloadListener implements Listener {
             + Integer.toString(chunk.getZ() * 16);
 
     AreaMarker m = main.markermap.remove(markerid);
+    main.entitycountmap.remove(markerid);
     if (m != null) {
       m.deleteMarker();
     }

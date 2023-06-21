@@ -6,7 +6,7 @@
 
     <groupId>io.github.sebseb7.loadedchunks</groupId>
     <artifactId>Dynmap-LoadedChunks</artifactId>
-    <version>0.3a</version>
+    <version>0.4</version>
     <packaging>jar</packaging>
 
     <name>Dynmap-LoadedChunks</name>

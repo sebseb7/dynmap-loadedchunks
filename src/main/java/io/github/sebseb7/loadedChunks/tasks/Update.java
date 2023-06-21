@@ -6,12 +6,16 @@ import java.util.List;
 import java.util.Map;
 import org.bukkit.Chunk;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.MarkerSet;
 
 public class Update {
 
   public static void updateTimed(Loadedchunks main, MarkerSet set) {
+    double opacity = main.getConfig().getDouble("opacity", 0.5);
+    main.entitycountmap.clear();
     List<World> worlds = main.getServer().getWorlds();
     for (int i = 0; i < worlds.size(); i++) {
       World world = worlds.get(i);
@@ -22,14 +26,43 @@ public class Update {
 
       for (int j = 0; j < loadedChunks.length; j++) {
         Chunk chunk = loadedChunks[j];
-        String type = "";
-        if (chunk.getLoadLevel() == Chunk.LoadLevel.BORDER) {
-          type = "BORDER";
-        } else if (chunk.getLoadLevel() == Chunk.LoadLevel.ENTITY_TICKING) {
-          type = "ENTITY_TICKING";
-        } else if (chunk.getLoadLevel() == Chunk.LoadLevel.TICKING) {
-          type = "TICKING";
+        if (chunk.getLoadLevel() == Chunk.LoadLevel.ENTITY_TICKING) {
+          String countid =
+              wname
+                  + " "
+                  + Integer.toString(chunk.getX() - (chunk.getX() % 16))
+                  + " "
+                  + Integer.toString(chunk.getX() - (chunk.getX() % 16));
+          int count = main.entitycountmap.getOrDefault(countid, 0);
+          if (chunk.getEntities().length > count) {
+            main.entitycountmap.put(countid, chunk.getEntities().length);
+          }
+          ;
         }
+      }
+
+      for (int j = 0; j < loadedChunks.length; j++) {
+        Chunk chunk = loadedChunks[j];
+        String desc = "";
+        if (chunk.getLoadLevel() == Chunk.LoadLevel.BORDER) {
+          desc = "BORDER";
+        } else if (chunk.getLoadLevel() == Chunk.LoadLevel.ENTITY_TICKING) {
+          desc = "ENTITY_TICKING";
+        } else if (chunk.getLoadLevel() == Chunk.LoadLevel.TICKING) {
+          desc = "TICKING";
+        }
+
+        int entity_count = 0;
+        int with_ai_count = 0;
+        Entity[] entities = chunk.getEntities();
+        for (int q = 0; q < entities.length; q++) {
+          entity_count++;
+          if (entities[q] instanceof LivingEntity && ((LivingEntity) entities[q]).hasAI()) {
+            with_ai_count++;
+          }
+        }
+
+        desc += "<br>Entites: " + entity_count + "<br/> WithAI: " + with_ai_count;
 
         String markerid =
             wname
@@ -42,16 +75,30 @@ public class Update {
 
         if (m != null) {
 
-          if (m.getDescription() != type) {
-            m.setDescription(type);
-            double opacity = main.getConfig().getDouble("opacity", 0.5);
-            if (type == "BORDER") {
-              m.setFillStyle(opacity, 0x0000ff);
-            } else if (type == "ENTITY_TICKING") {
-              m.setFillStyle(opacity, 0xff0000);
-            } else if (type == "TICKING") {
-              m.setFillStyle(opacity, 0xff00ff);
-            }
+          if (m.getDescription() != desc) {
+            m.setDescription(desc);
+          }
+
+          int fillColor = 0;
+          if (chunk.getLoadLevel() == Chunk.LoadLevel.BORDER) {
+            fillColor = 0x0000ff;
+          } else if (chunk.getLoadLevel() == Chunk.LoadLevel.ENTITY_TICKING) {
+            String countid =
+                wname
+                    + " "
+                    + Integer.toString(chunk.getX() - (chunk.getX() % 16))
+                    + " "
+                    + Integer.toString(chunk.getX() - (chunk.getX() % 16));
+            int max = main.entitycountmap.getOrDefault(countid, 0);
+            double fraction = entity_count / (double) max;
+            if (fraction > 1.0) fraction = 1.0;
+            int yellow = (int) Math.round(fraction * 255.0);
+            fillColor = 0xff0000 + yellow * 0x0100;
+          } else if (chunk.getLoadLevel() == Chunk.LoadLevel.TICKING) {
+            fillColor = 0xff00ff;
+          }
+          if (m.getFillColor() != fillColor) {
+            m.setFillStyle(opacity, fillColor);
           }
         }
       }
@@ -60,6 +107,8 @@ public class Update {
 
   public static void updateTimedFull(Loadedchunks main, MarkerSet set) {
 
+    double opacity = main.getConfig().getDouble("opacity", 0.5);
+    main.entitycountmap.clear();
     final Map<String, AreaMarker> newmap = new HashMap<>();
 
     List<World> worlds = main.getServer().getWorlds();
@@ -72,14 +121,41 @@ public class Update {
 
       for (int j = 0; j < loadedChunks.length; j++) {
         Chunk chunk = loadedChunks[j];
-        String type = "";
-        if (chunk.getLoadLevel() == Chunk.LoadLevel.BORDER) {
-          type = "BORDER";
-        } else if (chunk.getLoadLevel() == Chunk.LoadLevel.ENTITY_TICKING) {
-          type = "ENTITY_TICKING";
-        } else if (chunk.getLoadLevel() == Chunk.LoadLevel.TICKING) {
-          type = "TICKING";
+        String countid =
+            wname
+                + " "
+                + Integer.toString(chunk.getX() - (chunk.getX() % 16))
+                + " "
+                + Integer.toString(chunk.getX() - (chunk.getX() % 16));
+        int count = main.entitycountmap.getOrDefault(countid, 0);
+        if (chunk.getEntities().length > count) {
+          main.entitycountmap.put(countid, chunk.getEntities().length);
         }
+        ;
+      }
+
+      for (int j = 0; j < loadedChunks.length; j++) {
+        Chunk chunk = loadedChunks[j];
+        String desc = "";
+        if (chunk.getLoadLevel() == Chunk.LoadLevel.BORDER) {
+          desc = "BORDER";
+        } else if (chunk.getLoadLevel() == Chunk.LoadLevel.ENTITY_TICKING) {
+          desc = "ENTITY_TICKING";
+        } else if (chunk.getLoadLevel() == Chunk.LoadLevel.TICKING) {
+          desc = "TICKING";
+        }
+
+        int entity_count = 0;
+        int with_ai_count = 0;
+        Entity[] entities = chunk.getEntities();
+        for (int q = 0; q < entities.length; q++) {
+          entity_count++;
+          if (entities[q] instanceof LivingEntity && ((LivingEntity) entities[q]).hasAI()) {
+            with_ai_count++;
+          }
+        }
+
+        desc += "<br>Entites: " + entity_count + "<br/> WithAI: " + with_ai_count;
 
         String markerid =
             wname
@@ -101,23 +177,31 @@ public class Update {
 
         AreaMarker m = main.markermap.remove(markerid);
         if (m == null) {
-          m = set.createAreaMarker(markerid, type, false, wname, x, z, false);
+          m = set.createAreaMarker(markerid, desc, false, wname, x, z, false);
         } else {
-          if (m.getDescription() != type) {
-            m.deleteMarker();
-            m = set.createAreaMarker(markerid, type, false, wname, x, z, false);
+          if (m.getDescription() != desc) {
+            m.setDescription(desc);
           }
         }
         if (m == null) {
           continue;
         }
 
-        double opacity = main.getConfig().getDouble("opacity", 0.5);
         m.setLineStyle(1, opacity, 0x00ff00);
         if (chunk.getLoadLevel() == Chunk.LoadLevel.BORDER) {
           m.setFillStyle(opacity, 0x0000ff);
         } else if (chunk.getLoadLevel() == Chunk.LoadLevel.ENTITY_TICKING) {
-          m.setFillStyle(opacity, 0xff0000);
+          String countid =
+              wname
+                  + " "
+                  + Integer.toString(chunk.getX() - (chunk.getX() % 16))
+                  + " "
+                  + Integer.toString(chunk.getX() - (chunk.getX() % 16));
+          int max = main.entitycountmap.getOrDefault(countid, 0);
+          double fraction = entity_count / (double) max;
+          if (fraction > 1.0) fraction = 1.0;
+          int yellow = (int) Math.round(fraction * 255.0);
+          m.setFillStyle(opacity, 0xff0000 + yellow * 0x100);
         } else if (chunk.getLoadLevel() == Chunk.LoadLevel.TICKING) {
           m.setFillStyle(opacity, 0xff00ff);
         }

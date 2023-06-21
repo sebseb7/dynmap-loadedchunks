@@ -5,7 +5,6 @@ import io.github.sebseb7.loadedchunks.listener.ChunkUnloadListener;
 import io.github.sebseb7.loadedchunks.tasks.Update;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -20,6 +19,7 @@ public final class Loadedchunks extends JavaPlugin {
   DynmapAPI api;
   MarkerSet set;
   public Map<String, AreaMarker> markermap;
+  public Map<String, Integer> entitycountmap;
   private static Loadedchunks instance;
   private boolean reload = false;
 
@@ -36,6 +36,7 @@ public final class Loadedchunks extends JavaPlugin {
       return;
     }
     markermap = new ConcurrentHashMap<>();
+    entitycountmap = new ConcurrentHashMap<>();
     api = (DynmapAPI) dynmap;
     getServer().getConsoleSender().sendMessage("Loaded");
 
@@ -69,6 +70,7 @@ public final class Loadedchunks extends JavaPlugin {
       set = null;
     }
     markermap.clear();
+    entitycountmap.clear();
   }
 
   private void startUpdateTask() {
