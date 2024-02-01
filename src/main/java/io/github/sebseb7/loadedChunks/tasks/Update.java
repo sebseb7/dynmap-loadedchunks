@@ -76,7 +76,7 @@ public class Update {
         if (m != null) {
 
           if (m.getDescription() != desc) {
-            m.setDescription(desc);
+            if (m.getMarkerSet() != null) m.setDescription(desc);
           }
 
           int fillColor = 0;
@@ -98,7 +98,11 @@ public class Update {
             fillColor = 0xff00ff;
           }
           if (m.getFillColor() != fillColor) {
-            m.setFillStyle(opacity, fillColor);
+            try {
+              m.setFillStyle(opacity, fillColor);
+            }
+            catch(Exception e) {
+            }
           }
         }
       }

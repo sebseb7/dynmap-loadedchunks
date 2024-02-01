@@ -6,7 +6,7 @@
 
     <groupId>io.github.sebseb7.loadedchunks</groupId>
     <artifactId>Dynmap-LoadedChunks</artifactId>
-    <version>0.4</version>
+    <version>0.4a</version>
     <packaging>jar</packaging>
 
     <name>Dynmap-LoadedChunks</name>
@@ -60,12 +60,12 @@
         <dependency>
             <groupId>us.dynmap</groupId>
             <artifactId>dynmap-api</artifactId>
-            <version>3.3</version>
+            <version>3.5</version>
         </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <version>1.20.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
